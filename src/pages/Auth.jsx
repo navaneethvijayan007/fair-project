@@ -36,9 +36,9 @@ const Auth = ({ insideRegister }) => {
     }
   }
 
-  const login = async (e)=>{
+  const login = async(e) => {
     e.preventDefault()
-    if( userInput.password && userInput.email){
+    if(userInput.password && userInput.email){
       //api call
       try{
         const result = await loginAPI(userInput)
@@ -46,11 +46,11 @@ const Auth = ({ insideRegister }) => {
           sessionStorage.setItem("user",JSON.stringify(result.data.user))
           sessionStorage.setItem("token",result.data.token)
           setLogin(true)
-          setTimeout(()=>{
-            navigate("/")
+          setTimeout( () => {
+            navigate('/')
             setUserInput({username:"",email:"",password:""})
-            setIsLogin(false)
-          }, 2000);
+            setLogin(false)
+          }, 2000)
         }else{
           if(result.response.status==404){
             alert(result.response.data)
@@ -60,7 +60,7 @@ const Auth = ({ insideRegister }) => {
         console.log(err);
       }
     }else{
-      alert("Please fill the form completly!")
+      alert("Please fill the form completely!!")
     }
   }
 

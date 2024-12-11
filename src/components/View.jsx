@@ -1,10 +1,11 @@
 import React, { useContext, useEffect,useState } from 'react'
 import Add from './Add'
 import Edit from './Edit'
-import { userProjectAPI } from '../services/allAPI'
-import { addProjectContext } from '../contexts/ContextShare'
+import { deleteProjectAPI, userProjectAPI } from '../services/allAPI'
+import { addProjectContext, editProjectContext } from '../contexts/ContextShare'
 
 const View = () => {
+  const {editProjectResponse,setEditProjectResponse} = useContext(editProjectContext)
   const {addProjectResponse,setAddProjectResponse} = useContext(addProjectContext)
   // steps to display user projects
   // create state to store user projects
@@ -13,7 +14,7 @@ const View = () => {
   //call that user project getting function using useEffect
   useEffect(()=>{
     getUserProject()
-  },[addProjectResponse])
+  },[addProjectResponse,editProjectResponse])
   //create a function for getting all user projects and call api inside that function store all user projects inside the state
 
   const getUserProject = async () => {
@@ -33,6 +34,24 @@ const View = () => {
       }
     }
   }
+   
+const removeProject = async (id) => {
+  const token = sessionStorage.getItem("token")
+  if(token){
+    const reqHeader = {
+      
+      "Authorization" : `Bearer ${token}`
+    }
+    try{
+      const result = await deleteProjectAPI(id,reqHeader)
+      if(result.status==200){
+        getUserProject()
+      }
+    }catch(err){
+      console.log(err);
+    }
+  }
+}
   return (
     <>
       <div className="d-flex justify-content-between mt-3">
@@ -48,7 +67,7 @@ const View = () => {
           <div className="d-flex align-items-center">
             <div> <Edit project={project}/> </div>
             <button className='btn'> <a href={project?.github} target='_blank'><i className='fa-brands fa-github'></i></a></button>
-            <button className='btn'><i className='fa-solid fa-trash text-danger'></i></button>
+            <button onClick={()=>removeProject(project?._id)} className='btn'><i className='fa-solid fa-trash text-danger'></i></button>
           </div>
         </div>
           ))
