@@ -7,8 +7,10 @@ import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard'
 import Projects from './pages/Projects'
 import Footer from './components/Footer'
-function App() {
+import { useContext } from 'react'
+import { tokenContext } from './contexts/TokenAuth'
 
+function App() {
   return (
     <>
     <Routes>

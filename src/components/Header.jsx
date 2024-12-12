@@ -1,18 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Navbar,Container } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link,  useNavigate } from 'react-router-dom'
+import { tokenContext } from '../contexts/TokenAuth'
 
-const Header = ({insideDashBoard}) => {
+const Header = ({insideDashboard}) => {
+  const {authauthorisedUser,setAuthorisedUser}= useContext(tokenContext)
+  const navigate = useNavigate()
+  const logout = () => {
+    setAuthorisedUser(false)
+    sessionStorage.clear()
+    navigate('/')
+  }
+
   return (
     <>
-      <Navbar style={{zIndex:1}} className="shadow border rounded position-fixed w-100">
+      <Navbar style={{zIndex:1}} className="shadow border rounded postion-fixed w-100">
         <Container>
           <Navbar.Brand>
-            <Link to={'/'} className='text-decoration-none fw-bolder'><i className='fa-brands fa-docker'></i>Project Fair</Link>
+            <Link to={'/'} className='text-decoration-none fw-bolder'><i className="fa-brands fa-docker me-1"></i>Project Fair</Link>
           </Navbar.Brand>
           {
-            insideDashBoard &&
-            <button className='btn btn-link'>Logout <i className="fa-solid fa-right-from-bracket ms-1"></i></button>
+            insideDashboard &&
+            <button onClick={logout} className='btn btn-link fw-bolder'>Logout <i className="fa-solid fa-right-from-bracket ms-1"></i></button>
           }
         </Container>
       </Navbar>
@@ -20,4 +29,4 @@ const Header = ({insideDashBoard}) => {
   )
 }
 
-export default Header
+export default Header
